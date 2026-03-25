@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>חידון זיהוי - בוגרי קרית גת</title>
+  <title>קבוצה פ"ה - ישי"ק ק"ג</title>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +46,6 @@
       flex-direction: column;
       position: relative;
       z-index: 10;
-      /* כאן אין אנימציה כברירת מחדל כדי שהמעברים יהיו רגילים */
     }
 
     .btn-small {
@@ -141,7 +140,6 @@
 
     #restartBtn { background: #1a5c4e; margin-top: 20px; width: 100%; display: none; font-weight: 800; }
 
-    /* האפקט האלכסוני פועל רק על המכולה הזו בסיום */
     .result-display {
       text-align: center;
       animation: resultDiagonalShow 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -216,7 +214,6 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div class="container" id="mainContainer">
-  <!-- מסך פתיחה -->
   <div id="introScreen">
     <h1>בחר בחור מהשיעור</h1>
     <div class="subtitle">ש"ג פ"א ישי"ק קרית גת</div>
@@ -229,7 +226,6 @@
     <button class="btn btn-yes" style="width:100%" onclick="startQuiz()">🔥 בואו נתחיל!</button>
   </div>
 
-  <!-- מסך חידון -->
   <div id="quizScreen">
     <button id="backBtn" class="btn-small" onclick="goBack()" style="visibility:hidden;">↩️ חזור</button>
     <div id="progressArea">
@@ -245,7 +241,6 @@
     </div>
   </div>
 
-  <!-- מסך תוצאה -->
   <div id="resultScreen">
     <div id="resultContent"></div>
     <button class="btn" id="restartBtn" onclick="goToMainScreen()">🔄 נסה שוב</button>
@@ -256,7 +251,7 @@
 const tree = {
     q: "האם הוא התחיל וסיים בישי''ג ק''ג?",
     yes: {
-        q: "שליח או מדריך בישיבה?",
+        q: "האם הוא שליח או מדריך בישיבה (לא רק ק''ג)?",
         yes: {
             q: "יש לו אח גדול שלמד בקרית גת?",
             yes: {
@@ -375,7 +370,7 @@ const tree = {
     no: {
         q: "קבוצה פה?",
         yes: {
-            q: "(לא רק ק"ג) שליח או מדריך בישיבה?",
+            q: "האם הוא שליח או מדריך בישיבה (לא רק ק''ג)?",
             yes: {
                 q: "אזרח אמריקאי?",
                 yes: {
@@ -488,7 +483,6 @@ let pathStack = [];
 const EXPECTED_STEPS = 6;
 let animationId;
 
-// Confetti Logic - מעודן וקצר
 function fireConfetti() {
   const canvas = document.getElementById('confetti-canvas');
   canvas.style.display = 'block';
@@ -605,7 +599,6 @@ function showQuestion() {
     quizScreen.style.display = "none";
     resultScreen.style.display = "block";
     
-    // הפעלת מחלקת האנימציה האלכסונית רק כאן
     resultContent.className = "result-display";
     
     const fileNameForImage = currentNode.replace(/"/g, "'");
