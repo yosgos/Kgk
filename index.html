@@ -3,94 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>קבוצה פ"ה - ישי"ק ק"ג</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <title>חידון זיהוי - בוגרי קרית גת</title>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;800&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --secondary: #fbbf24;
+      --accent: #f43f5e;
+      --bg-gradient: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Heebo', sans-serif;
+      font-family: 'Assistant', 'Heebo', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #0d3b31 0%, #1a5c4e 50%, #2d5a27 100%);
+      background: var(--bg-gradient);
       background-attachment: fixed;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      overflow-x: hidden;
+      overflow: hidden; /* מונע גלילה מיותרת בגלל העיגולים */
     }
 
-    /* אנימציה אלכסונית מיוחדת - רק לתוצאה הסופית */
-    @keyframes resultDiagonalShow {
-      0% {
-        opacity: 0;
-        transform: translate(-150px, 150px) rotate(-10deg) scale(0.5);
-      }
-      70% {
-        transform: translate(10px, -10px) rotate(2deg) scale(1.05);
-      }
-      100% {
-        opacity: 1;
-        transform: translate(0, 0) rotate(0deg) scale(1);
-      }
+    /* עיצוב העיגולים הצפים ברקע */
+    .bubbles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -150px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      animation: rise 15s infinite ease-in;
+    }
+
+    @keyframes rise {
+      0% { bottom: -150px; transform: translateX(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { bottom: 110vh; transform: translateX(100px) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.98);
+      background: var(--card-bg);
       width: 100%;
-      max-width: 500px;
-      padding: 40px 30px;
-      border-radius: 40px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
+      max-width: 480px;
+      padding: 35px 25px;
+      border-radius: 35px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       position: relative;
       z-index: 10;
+      border: 4px solid white;
+      animation: float 6s ease-in-out infinite;
     }
 
     .btn-small {
-      background: #bdc3c7; 
-      color: #2c3e50; 
+      background: #e2e8f0; 
+      color: #475569; 
       border: none; 
-      border-radius: 12px;
+      border-radius: 50px;
       font-size: 14px; 
       cursor: pointer; 
-      padding: 8px 16px; 
+      padding: 6px 16px; 
       font-weight: 700;
-      transition: all 0.3s ease; 
-      align-self: flex-end; 
-      margin-bottom: 20px;
+      transition: all 0.2s;
+      margin-bottom: 15px;
     }
 
     .progress-container {
-      width: 100%; height: 10px; background-color: #f1f3f5;
-      border-radius: 10px; margin-bottom: 20px; overflow: hidden;
+      width: 100%; height: 12px; background-color: #f1f5f9;
+      border-radius: 20px; margin-bottom: 25px; overflow: hidden;
+      border: 1px solid #e2e8f0;
     }
 
     .progress-bar {
-      height: 100%; background: #1a5c4e; width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%; 
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      width: 0%; 
+      transition: width 0.4s ease-out;
     }
 
-    h1 { font-size: 32px; font-weight: 900; color: #2c3e50; margin-bottom: 10px; text-align: center; }
-    .subtitle { font-size: 18px; color: #7f8c8d; text-align: center; margin-bottom: 20px; font-weight: 400; }
-    
-    .names-list-container {
-      background: #f8f9fa;
-      border-radius: 20px;
-      padding: 15px;
-      margin-bottom: 25px;
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #eee;
+    h1 { 
+      font-size: 34px; 
+      font-weight: 900; 
+      color: #064e3b; 
+      margin-bottom: 8px; 
+      text-align: center;
+    }
+
+    .subtitle { 
+      font-size: 18px; 
+      color: #374151; 
+      text-align: center; 
+      margin-bottom: 25px; 
+      font-weight: 600;
+      background: #fef3c7;
+      padding: 5px 15px;
+      border-radius: 50px;
+      display: inline-block;
     }
     
-    .names-list-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: #1a5c4e;
-      margin-bottom: 12px;
-      text-align: center;
-      text-transform: uppercase;
+    .names-list-container {
+      margin-bottom: 25px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 5px;
     }
 
     .names-grid {
@@ -102,107 +137,81 @@
 
     .name-item {
       flex: 0 1 calc(33.333% - 6px);
-      min-width: 80px;
       font-size: 11px;
-      color: #444;
-      background: white;
+      color: #064e3b;
+      background: rgba(255, 255, 255, 0.6);
       padding: 6px 4px;
-      border-radius: 6px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      border: 1px solid #f0f0f0;
-      line-height: 1.2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
+      border: 1px solid #d1fae5;
+      font-weight: 600;
     }
 
-    #questionNumber { font-weight: 800; font-size: 18px; margin-bottom: 15px; text-align: center; color: #1a5c4e; }
+    #questionNumber { 
+      font-weight: 800; 
+      font-size: 16px; 
+      margin-bottom: 10px; 
+      text-align: center; 
+      color: var(--primary-dark);
+    }
+
+    .question-box {
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .question-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
 
     #question {
-      font-size: 26px; font-weight: 800; color: #2c3e50; text-align: center;
-      margin-bottom: 60px; min-height: 100px; display: flex; align-items: center; justify-content: center;
-      line-height: 1.3;
+      font-size: 22px; 
+      font-weight: 400; 
+      color: #1f2937; 
+      line-height: 1.4;
     }
 
     .button-row { display: flex; gap: 15px; justify-content: center; }
 
     .btn {
-      color: white; border: none; border-radius: 20px; padding: 15px;
-      font-size: 24px; font-weight: 800; cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex: 1; min-height: 80px;
+      color: white; border: none; border-radius: 25px; padding: 15px;
+      font-size: 26px; font-weight: 900; cursor: pointer;
+      transition: all 0.2s; flex: 1; min-height: 75px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      position: relative;
+      top: 0;
     }
 
-    .btn-yes { background: linear-gradient(135deg, #0a3d31 0%, #1a5c4e 100%); box-shadow: 0 10px 20px rgba(10, 61, 49, 0.2); }
-    .btn-no { background: linear-gradient(135deg, #7b1d1d 0%, #a52a2a 100%); box-shadow: 0 10px 20px rgba(123, 29, 29, 0.2); }
-    .btn:hover { transform: scale(1.05); }
+    .btn:active { top: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-    #restartBtn { background: #1a5c4e; margin-top: 20px; width: 100%; display: none; font-weight: 800; }
-
-    .result-display {
-      text-align: center;
-      animation: resultDiagonalShow 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
+    .btn-yes { background: var(--primary); }
+    .btn-no { background: var(--accent); }
 
     .profile-image-container {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 180px;
+      height: 180px;
       margin: 0 auto 20px;
     }
 
     .profile-image-large {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 6px solid #fff;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      position: relative;
-      z-index: 2;
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      border: 6px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      position: relative; z-index: 2;
     }
 
-    .image-glow {
-      position: absolute;
-      top: -5px; left: -5px; right: -5px; bottom: -5px;
-      background: linear-gradient(45deg, #f1c40f, #2ecc71, #f1c40f);
-      border-radius: 50%;
-      z-index: 1;
-      filter: blur(10px);
-      opacity: 0.7;
-      animation: rotateGlow 4s linear infinite;
-    }
-
-    @keyframes rotateGlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .winner-label {
-      font-size: 16px;
-      color: #7f8c8d;
-      margin-bottom: 5px;
-      font-weight: 700;
-    }
-
-    .winner-name {
-      font-size: 40px;
-      font-weight: 900;
-      color: #1a5c4e;
-      margin-bottom: 8px;
-      line-height: 1.1;
-    }
+    .winner-name { font-size: 38px; font-weight: 900; color: #064e3b; margin-bottom: 10px; }
 
     #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
-      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 999; display: none;
     }
 
     #introScreen, #quizScreen, #resultScreen { display: none; }
@@ -211,73 +220,88 @@
 </head>
 <body>
 
+<div class="bubbles-container" id="bubblesContainer"></div>
+
 <canvas id="confetti-canvas"></canvas>
 
 <div class="container" id="mainContainer">
   <div id="introScreen">
     <h1>בחר בחור מהשיעור</h1>
-    <div class="subtitle">ש"ג פ"א ישי"ק קרית גת</div>
+    <center><div class="subtitle">ש"ג פ"א | ישי"ק קרית גת</div></center>
     
     <div class="names-list-container">
-      <div class="names-list-title">רשימת הבחורים :</div>
       <div id="namesGrid" class="names-grid"></div>
     </div>
 
-    <button class="btn btn-yes" style="width:100%" onclick="startQuiz()">🔥 בואו נתחיל!</button>
+    <button class="btn btn-yes" style="width:100%" onclick="startQuiz()">בואו נשחק! 🚀</button>
   </div>
 
   <div id="quizScreen">
-    <button id="backBtn" class="btn-small" onclick="goBack()" style="visibility:hidden;">↩️ חזור</button>
-    <div id="progressArea">
-      <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
       <div id="questionNumber"></div>
+      <button id="backBtn" class="btn-small" onclick="goBack()" style="visibility:hidden;">↩️ חזור</button>
     </div>
-
-    <h2 id="question">טוען...</h2>
     
-    <div class="button-row" id="actionButtons">
-      <button class="btn btn-yes" onclick="answer('yes')">כן</button>
-      <button class="btn btn-no" onclick="answer('no')">לא</button>
+    <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+
+    <div class="question-box">
+      <div id="icon" class="question-icon">🤔</div>
+      <h2 id="question">טוען...</h2>
+    </div>
+    
+    <div class="button-row">
+      <button class="btn btn-yes" onclick="answer('yes')">כן 👍</button>
+      <button class="btn btn-no" onclick="answer('no')">לא 👎</button>
     </div>
   </div>
 
   <div id="resultScreen">
-    <div id="resultContent"></div>
-    <button class="btn" id="restartBtn" onclick="goToMainScreen()">🔄 נסה שוב</button>
+    <div id="resultContent" style="text-align: center;"></div>
+    <button class="btn btn-yes" style="margin-top: 20px; width: 100%;" onclick="goToMainScreen()">שחק שוב 🔁</button>
   </div>
 </div>
 
 <script>
 const tree = {
-    q: "האם הוא התחיל וסיים בישיבה גדולה ק''ג?",
+    q: "האם הוא התחיל וסיים בישיבה גדולה קרית גת?",
+    icon: "🏫",
     yes: {
         q: "האם הוא שליח או מדריך בישיבה (לא רק ק''ג)?",
+        icon: "👨‍🏫",
         yes: {
             q: "יש לו אח גדול שלמד בקרית גת?",
+            icon: "👬",
             yes: {
                 q: "אחיו ש''ג שלנו?",
+                icon: "🎓",
                 yes: {
                     q: "תושב הדרום?",
+                    icon: "🐪",
                     yes: {
-                        q: "שליח בישיבה קטנה?",
+                        q: "שליח בישי''ק?",
+                        icon: "📜",
                         yes: "שאולי פרוס",
                         no: "שולם-בער כהנא"
                     },
                     no: {
-                        q: "שליח בישיבה קטנה?",
+                        q: "שליח בישי''ק?",
+                        icon: "📜",
                         yes: "שניאור בורטניק",
                         no: "בנימין כלאב"
                     }
                 },
                 no: {
                     q: "מוצא מזרחי?",
+                    icon: "🌍",
                     yes: {
                         q: "חתן?",
+                        icon: "💍",
                         yes: "דויד טובי",
                         no: "לוי חנונו"
                     },
                     no: {
                         q: "חתן?",
+                        icon: "💍",
                         yes: "דובי צירקוס",
                         no: "לוי רייכמיסטרובסקי"
                     }
@@ -285,28 +309,35 @@ const tree = {
             },
             no: {
                 q: "נמצא היום בק''ג?",
+                icon: "📍",
                 yes: {
-                    q: "שליח בישיבה גדולה ק''ג?",
+                    q: "שליח בישי''ג?",
+                    icon: "💼",
                     yes: {
                         q: "בכור?",
+                        icon: "🥇",
                         yes: "איתי ג'רבי",
                         no: "צביקי מונדשיין"
                     },
                     no: {
                         q: "יליד תשס''ג?",
+                        icon: "📅",
                         yes: "צביקי קנלסקי",
                         no: 'מנחם רוזנברג ב"ש'
                     }
                 },
                 no: {
                     q: "בן של שליח (בעבר או בהווה)?",
+                    icon: "🏢",
                     yes: {
                         q: "אזרח אמריקאי?",
+                        icon: "🇺🇸",
                         yes: "מנחם ירס",
                         no: "שניאור קורץ"
                     },
                     no: {
                         q: "אזרח אמריקאי?",
+                        icon: "🇺🇸",
                         yes: "מוישי ואלפין",
                         no: "איציק בינשטוק"
                     }
@@ -315,25 +346,32 @@ const tree = {
         },
         no: {
             q: "דובר שפה נוספת?",
+            icon: "🗣️",
             yes: {
                 q: "סיים קבוצה פ''ה?",
+                icon: "✈️",
                 yes: {
                     q: "בן של שליח (בעבר או בהווה)?",
+                    icon: "🏠",
                     yes: {
                         q: "אזרח אמריקאי?",
+                        icon: "🇺🇸",
                         yes: "שמחה קרעמר",
                         no: "יוסי גושן"
                     },
                     no: {
                         q: "אזרח אמריקאי?",
+                        icon: "🇺🇸",
                         yes: "ישראל פרץ",
                         no: "יוסי ממוט"
                     }
                 },
                 no: {
                     q: "האם הוא בכור?",
+                    icon: "👑",
                     no: {
                         q: "אזרח אמריקאי?",
+                        icon: "🇺🇸",
                         yes: "דובי חזן",
                         no: "שולם אוסטרובסקי"
                     },
@@ -342,24 +380,30 @@ const tree = {
             },
             no: {
                 q: "מוצא מזרחי?",
+                icon: "🌍",
                 yes: {
                     q: "האם הוא בן זקונים?",
+                    icon: "👶",
                     yes: "אלי זוהר",
                     no: {
                         q: "יש לו משקפיים?",
+                        icon: "👓",
                         yes: "ישי ביטון",
                         no: "יוסי טנג'י"
                     }
                 },
                 no: {
                     q: "תושב הדרום?",
+                    icon: "☀️",
                     yes: {
                         q: "בן זקונים ?",
+                        icon: "👶",
                         yes: "מוישי הרשקופ",
                         no: "דובער שחם"
                     },
                     no: {
                         q: "נשוי?",
+                        icon: "🤵",
                         yes: "מיכאל יעקובוביץ",
                         no: "יוסי נויהויזר"
                     }
@@ -369,32 +413,41 @@ const tree = {
     },
     no: {
         q: "קבוצה פה?",
+        icon: "🗽",
         yes: {
-            q: "האם הוא שליח או מדריך בישיבה?",
+            q: "האם הוא שליח או מדריך בישיבה (לא רק ק''ג)?",
+            icon: "💼",
             yes: {
                 q: "אזרח אמריקאי?",
+                icon: "🇺🇸",
                 yes: {
                     q: "היה איש צוות בישיבת קיץ?",
+                    icon: "☀️",
                     yes: {
                         q: "בן זקונים",
+                        icon: "👶",
                         yes: "ישראליק ביר",
                         no: "ליפא בראון"
                     },
                     no: {
                         q: "בכור",
+                        icon: "🥇",
                         yes: "ישראליק טרקסלר",
                         no: "גדליהו שארר"
                     }
                 },
                 no: {
                     q: "בכור?",
+                    icon: "🥇",
                     yes: {
-                        q: "מגדליסט?",
+                        q: "האם הוא בוגר ישיבת מגדל העמק?",
+                        icon: "🏛️",
                         yes: "ישראל משה שוורץ",
                         no: "בנימין גולדשטיין"
                     },
                     no: {
-                        q: "מגדליסט?",
+                        q: "האם הוא בוגר ישיבת מגדל העמק?",
+                        icon: "🏛️",
                         yes: "מענדי סגל",
                         no: "מענדי בינשטוק"
                     }
@@ -402,10 +455,13 @@ const tree = {
             },
             no: {
                 q: "האם הוא כהן / לוי?",
+                icon: "👐",
                 yes: {
                     q: "אזרח אמריקאי?",
+                    icon: "🇺🇸",
                     yes: {
                         q: "בן של שליח?",
+                        icon: "🏠",
                         yes: "יענקול פרידמן",
                         no: "מוישי וינפלד"
                     },
@@ -413,13 +469,16 @@ const tree = {
                 },
                 no: {
                     q: "האם הוא מדבר בבית שפה נוספת חוץ מעברית?",
+                    icon: "🌐",
                     yes: {
                         q: "בכור?",
+                        icon: "🥇",
                         yes: "יוסי אלפנביין",
                         no: "מענדל חביב"
                     },
                     no: {
-                        q: "מגדליסט?",
+                        q: "האם הוא בוגר ישיבת מגדל העמק?",
+                        icon: "🏛️",
                         yes: "ברוך אשכנזי",
                         no: "צבי לבנהרץ"
                     }
@@ -428,26 +487,33 @@ const tree = {
         },
         no: {
             q: "מוצא מזרחי?",
+            icon: "🌍",
             yes: {
                 q: "נמצא עכשיו בקבוצה פ''ו?",
+                icon: "📅",
                 yes: {
                     q: "בן של שליח?",
+                    icon: "🏠",
                     yes: "שניאור ציפורי",
                     no: {
                         q: "למד בת''ת תורת אמת?",
+                        icon: "📚",
                         yes: "ישראל אדרעי",
                         no: "שניאור אליאס"
                     }
                 },
                 no: {
                     q: "למד בת''ת תורת אמת?",
+                    icon: "📚",
                     yes: {
                         q: "בכור",
+                        icon: "🥇",
                         yes: "יאיר חייט",
                         no: "לוי סודרי"
                     },
                     no: {
                         q: "בן של שליח?",
+                        icon: "🏠",
                         yes: "חיים מאיר ביטון",
                         no: "מענדי מוטולה"
                     }
@@ -455,20 +521,25 @@ const tree = {
             },
             no: {
                 q: "בן של שליח?",
+                icon: "🏠",
                 yes: {
                     q: "דובר שפה נוספת?",
+                    icon: "🗣️",
                     yes: "זלמן טברדוביץ",
                     no: {
                         q: "בוגר קרית אתא?",
+                        icon: "📍",
                         yes: "מענדי קישון",
                         no: "מענדי מושקוביץ"
                     }
                 },
                 no: {
                     q: "בכור?",
+                    icon: "👑",
                     yes: "יעקב ניימן",
                     no: {
-                        q: "מגדליסט?",
+                        q: "האם הוא בוגר ישיבת מגדל העמק?",
+                        icon: "🏛️",
                         yes: "שמוליק ליפשיץ",
                         no: 'מענדי רוזנברג ב"ב'
                     }
@@ -480,8 +551,23 @@ const tree = {
 
 let currentNode;
 let pathStack = [];
-const EXPECTED_STEPS = 6;
-let animationId;
+
+// יצירת העיגולים המעוצבים ברקע
+function createBubbles() {
+    const container = document.getElementById('bubblesContainer');
+    const bubbleCount = 12;
+    for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = Math.random() * 100 + 50;
+        bubble.style.width = size + 'px';
+        bubble.style.height = size + 'px';
+        bubble.style.left = Math.random() * 100 + '%';
+        bubble.style.animationDelay = Math.random() * 8 + 's';
+        bubble.style.animationDuration = (Math.random() * 7 + 10) + 's';
+        container.appendChild(bubble);
+    }
+}
 
 function fireConfetti() {
   const canvas = document.getElementById('confetti-canvas');
@@ -489,73 +575,45 @@ function fireConfetti() {
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
   let particles = [];
   const colors = ['#f1c40f', '#2ecc71', '#3498db', '#e74c3c'];
-
   for (let i = 0; i < 80; i++) {
     particles.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height - canvas.height,
-      size: Math.random() * 6 + 2,
+      size: Math.random() * 8 + 4,
       color: colors[Math.floor(Math.random() * colors.length)],
-      speed: Math.random() * 4 + 3,
-      angle: Math.random() * 6.28,
-      velocity: Math.random() * 2 + 0.5
+      speed: Math.random() * 5 + 2,
+      angle: Math.random() * 6.28
     });
   }
-
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach((p, i) => {
+    particles.forEach((p) => {
       p.y += p.speed;
-      p.x += Math.sin(p.angle) * p.velocity;
       ctx.fillStyle = p.color;
-      ctx.fillRect(p.x, p.y, p.size, p.size);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size/2, 0, Math.PI * 2);
+      ctx.fill();
     });
-    animationId = requestAnimationFrame(animate);
+    if (particles.length > 0 && particles[0].y < canvas.height) requestAnimationFrame(animate);
+    else canvas.style.display = 'none';
   }
   animate();
-  
-  setTimeout(() => {
-    cancelAnimationFrame(animationId);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.style.display = 'none';
-  }, 2500);
 }
 
 function getAllNames(node, namesList = []) {
-  if (typeof node === "string") {
-    namesList.push(node);
-  } else {
+  if (typeof node === "string") namesList.push(node);
+  else {
     if (node.yes) getAllNames(node.yes, namesList);
     if (node.no) getAllNames(node.no, namesList);
   }
   return namesList;
 }
 
-function getLastName(fullName) {
-  const parts = fullName.trim().split(/\s+/);
-  if (parts.length === 0) return "";
-  const lastPart = parts[parts.length - 1];
-  if ((lastPart.includes("''") || lastPart.includes('"') || lastPart.includes("'")) && parts.length > 2) {
-      return parts[parts.length - 2];
-  }
-  return lastPart;
-}
-
-function sortNamesByLastName(names) {
-  return names.sort((a, b) => {
-    const lastA = getLastName(a);
-    const lastB = getLastName(b);
-    return lastA.localeCompare(lastB, 'he');
-  });
-}
-
 window.onload = function() {
-  let allNames = [...new Set(getAllNames(tree))];
-  allNames = sortNamesByLastName(allNames);
-  
+  createBubbles();
+  let allNames = [...new Set(getAllNames(tree))].sort();
   const grid = document.getElementById("namesGrid");
   allNames.forEach(name => {
     const div = document.createElement("div");
@@ -567,21 +625,13 @@ window.onload = function() {
 
 function startQuiz() {
   document.getElementById("introScreen").style.display = "none";
-  document.getElementById("resultScreen").style.display = "none";
   document.getElementById("quizScreen").style.display = "block";
   restart();
 }
 
 function goToMainScreen() {
   document.getElementById("resultScreen").style.display = "none";
-  document.getElementById("quizScreen").style.display = "none";
   document.getElementById("introScreen").style.display = "block";
-}
-
-function updateProgress() {
-  const percentage = Math.min((pathStack.length / EXPECTED_STEPS) * 100, 100);
-  const bar = document.getElementById("progressBar");
-  if (bar) bar.style.width = percentage + "%";
 }
 
 function showQuestion() {
@@ -589,51 +639,40 @@ function showQuestion() {
   const resultScreen = document.getElementById("resultScreen");
   const resultContent = document.getElementById("resultContent");
   const backBtn = document.getElementById("backBtn");
+  const questionEl = document.getElementById("question");
+  const iconEl = document.getElementById("icon");
+  const bar = document.getElementById("progressBar");
   
-  updateProgress();
+  bar.style.width = (pathStack.length * 15) + "%";
   
   if (typeof currentNode === "string") {
-    const bar = document.getElementById("progressBar");
-    if (bar) bar.style.width = "100%";
-    
+    bar.style.width = "100%";
     quizScreen.style.display = "none";
     resultScreen.style.display = "block";
-    
-    resultContent.className = "result-display";
-    
-    const fileNameForImage = currentNode.replace(/"/g, "'");
-    const imagePath = `pics/${fileNameForImage}.JPG`;
-    
     resultContent.innerHTML = `
       <div class="profile-image-container">
-        <div class="image-glow"></div>
-        <img src="${imagePath}" class="profile-image-large" 
-             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentNode)}&background=1a5c4e&color=fff&size=240'" 
+        <img src="pics/${currentNode.replace(/"/g, "'")}.JPG" class="profile-image-large" 
+             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentNode)}&background=10b981&color=fff&size=200'" 
              alt="${currentNode}">
       </div>
-      <div class="winner-label">הבחור שחשבת עליו:</div>
       <div class="winner-name">${currentNode}</div>
-      <div style="font-size: 28px; margin-top: 5px;">🏆</div>
+      <div style="font-size: 30px;">מצאתי! 🎊</div>
     `;
-    
-    document.getElementById("restartBtn").style.display = "block";
     fireConfetti();
   } else {
     resultScreen.style.display = "none";
     quizScreen.style.display = "block";
-    
     document.getElementById("questionNumber").innerText = `שאלה ${pathStack.length + 1}`;
-    document.getElementById("question").innerText = currentNode.q;
+    questionEl.innerText = currentNode.q;
+    iconEl.innerText = currentNode.icon || "🤔";
     backBtn.style.visibility = pathStack.length > 0 ? "visible" : "hidden";
   }
 }
 
 function answer(response) {
-  if (currentNode[response]) {
-    pathStack.push(currentNode);
-    currentNode = currentNode[response];
-    showQuestion();
-  }
+  pathStack.push(currentNode);
+  currentNode = currentNode[response];
+  showQuestion();
 }
 
 function goBack() {
