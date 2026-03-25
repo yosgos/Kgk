@@ -17,6 +17,22 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* אנימציה אלכסונית מיוחדת - רק לתוצאה הסופית */
+    @keyframes resultDiagonalShow {
+      0% {
+        opacity: 0;
+        transform: translate(-150px, 150px) rotate(-10deg) scale(0.5);
+      }
+      70% {
+        transform: translate(10px, -10px) rotate(2deg) scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
     }
 
     .container {
@@ -29,6 +45,8 @@
       display: flex;
       flex-direction: column;
       position: relative;
+      z-index: 10;
+      /* כאן אין אנימציה כברירת מחדל כדי שהמעברים יהיו רגילים */
     }
 
     .btn-small {
@@ -121,66 +139,97 @@
     .btn-no { background: linear-gradient(135deg, #7b1d1d 0%, #a52a2a 100%); box-shadow: 0 10px 20px rgba(123, 29, 29, 0.2); }
     .btn:hover { transform: scale(1.05); }
 
-    #restartBtn { background: #c0392b; margin-top: 20px; width: 100%; display: none; font-weight: 800; }
+    #restartBtn { background: #1a5c4e; margin-top: 20px; width: 100%; display: none; font-weight: 800; }
 
+    /* האפקט האלכסוני פועל רק על המכולה הזו בסיום */
     .result-display {
       text-align: center;
-      animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: resultDiagonalShow 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .profile-image-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 20px;
     }
 
     .profile-image-large {
-      width: 240px; 
-      height: 240px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      border: 6px solid #1a5c4e;
-      margin: 0 auto 25px;
-      display: block;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      border: 6px solid #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .image-glow {
+      position: absolute;
+      top: -5px; left: -5px; right: -5px; bottom: -5px;
+      background: linear-gradient(45deg, #f1c40f, #2ecc71, #f1c40f);
+      border-radius: 50%;
+      z-index: 1;
+      filter: blur(10px);
+      opacity: 0.7;
+      animation: rotateGlow 4s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .winner-label {
       font-size: 16px;
       color: #7f8c8d;
       margin-bottom: 5px;
-      font-weight: 400;
+      font-weight: 700;
     }
 
     .winner-name {
-      font-size: 42px;
+      font-size: 40px;
       font-weight: 900;
       color: #1a5c4e;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.1;
-      letter-spacing: -1px;
     }
 
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
+    }
+
+    #introScreen, #quizScreen, #resultScreen { display: none; }
     #introScreen { display: block; }
-    #quizScreen { display: none; }
-    #resultScreen { display: none; }
   </style>
 </head>
 <body>
 
+<canvas id="confetti-canvas"></canvas>
+
 <div class="container" id="mainContainer">
+  <!-- מסך פתיחה -->
   <div id="introScreen">
-    <h1> בחר בחור מהשיעור</h1>
+    <h1>בחר בחור מהשיעור</h1>
     <div class="subtitle">ש"ג פ"א ישי"ק קרית גת</div>
     
     <div class="names-list-container">
       <div class="names-list-title">רשימת הבחורים :</div>
-      <div id="namesGrid" class="names-grid">
-      </div>
+      <div id="namesGrid" class="names-grid"></div>
     </div>
 
     <button class="btn btn-yes" style="width:100%" onclick="startQuiz()">🔥 בואו נתחיל!</button>
   </div>
 
+  <!-- מסך חידון -->
   <div id="quizScreen">
     <button id="backBtn" class="btn-small" onclick="goBack()" style="visibility:hidden;">↩️ חזור</button>
     <div id="progressArea">
@@ -196,18 +245,18 @@
     </div>
   </div>
 
+  <!-- מסך תוצאה -->
   <div id="resultScreen">
-    <div id="resultContent" class="result-display"></div>
+    <div id="resultContent"></div>
     <button class="btn" id="restartBtn" onclick="goToMainScreen()">🔄 נסה שוב</button>
   </div>
 </div>
 
 <script>
-// בעץ השתמשנו בגרשיים (") כפי שביקשת שיופיע באתר
 const tree = {
     q: "האם הוא התחיל וסיים בישי''ג ק''ג?",
     yes: {
-        q: "האם הוא שליח או מדריך בישיבה (לא רק ק"ג)?",
+        q: "שליח או מדריך בישיבה?",
         yes: {
             q: "יש לו אח גדול שלמד בקרית גת?",
             yes: {
@@ -437,6 +486,49 @@ const tree = {
 let currentNode;
 let pathStack = [];
 const EXPECTED_STEPS = 6;
+let animationId;
+
+// Confetti Logic - מעודן וקצר
+function fireConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+  const colors = ['#f1c40f', '#2ecc71', '#3498db', '#e74c3c'];
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      size: Math.random() * 6 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: Math.random() * 4 + 3,
+      angle: Math.random() * 6.28,
+      velocity: Math.random() * 2 + 0.5
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+      p.y += p.speed;
+      p.x += Math.sin(p.angle) * p.velocity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    animationId = requestAnimationFrame(animate);
+  }
+  animate();
+  
+  setTimeout(() => {
+    cancelAnimationFrame(animationId);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'none';
+  }, 2500);
+}
 
 function getAllNames(node, namesList = []) {
   if (typeof node === "string") {
@@ -451,9 +543,7 @@ function getAllNames(node, namesList = []) {
 function getLastName(fullName) {
   const parts = fullName.trim().split(/\s+/);
   if (parts.length === 0) return "";
-  
   const lastPart = parts[parts.length - 1];
-  // תומך במיון נכון גם עם גרשיים
   if ((lastPart.includes("''") || lastPart.includes('"') || lastPart.includes("'")) && parts.length > 2) {
       return parts[parts.length - 2];
   }
@@ -496,12 +586,11 @@ function goToMainScreen() {
 
 function updateProgress() {
   const percentage = Math.min((pathStack.length / EXPECTED_STEPS) * 100, 100);
-  document.getElementById("progressBar").style.width = percentage + "%";
+  const bar = document.getElementById("progressBar");
+  if (bar) bar.style.width = percentage + "%";
 }
 
 function showQuestion() {
-  const questionEl = document.getElementById("question");
-  const numberEl = document.getElementById("questionNumber");
   const quizScreen = document.getElementById("quizScreen");
   const resultScreen = document.getElementById("resultScreen");
   const resultContent = document.getElementById("resultContent");
@@ -510,30 +599,38 @@ function showQuestion() {
   updateProgress();
   
   if (typeof currentNode === "string") {
-    document.getElementById("progressBar").style.width = "100%";
+    const bar = document.getElementById("progressBar");
+    if (bar) bar.style.width = "100%";
+    
     quizScreen.style.display = "none";
     resultScreen.style.display = "block";
     
-    // פונקציה שמחליפה את הגרשיים (") בגרש (') רק עבור שם הקובץ
+    // הפעלת מחלקת האנימציה האלכסונית רק כאן
+    resultContent.className = "result-display";
+    
     const fileNameForImage = currentNode.replace(/"/g, "'");
     const imagePath = `pics/${fileNameForImage}.JPG`;
     
     resultContent.innerHTML = `
-      <img src="${imagePath}" class="profile-image-large" 
-           onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentNode)}&background=1a5c4e&color=fff&size=240'" 
-           alt="${currentNode}">
-      <div class="winner-label">הבחור שחשבת עליו הוא:</div>
+      <div class="profile-image-container">
+        <div class="image-glow"></div>
+        <img src="${imagePath}" class="profile-image-large" 
+             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentNode)}&background=1a5c4e&color=fff&size=240'" 
+             alt="${currentNode}">
+      </div>
+      <div class="winner-label">הבחור שחשבת עליו:</div>
       <div class="winner-name">${currentNode}</div>
-      <div style="font-size: 24px;">🎯</div>
+      <div style="font-size: 28px; margin-top: 5px;">🏆</div>
     `;
     
     document.getElementById("restartBtn").style.display = "block";
+    fireConfetti();
   } else {
     resultScreen.style.display = "none";
     quizScreen.style.display = "block";
     
-    numberEl.innerText = `שאלה ${pathStack.length + 1}`;
-    questionEl.innerText = currentNode.q;
+    document.getElementById("questionNumber").innerText = `שאלה ${pathStack.length + 1}`;
+    document.getElementById("question").innerText = currentNode.q;
     backBtn.style.visibility = pathStack.length > 0 ? "visible" : "hidden";
   }
 }
