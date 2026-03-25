@@ -203,6 +203,7 @@
 </div>
 
 <script>
+// בעץ השתמשנו בגרשיים (") כפי שביקשת שיופיע באתר
 const tree = {
     q: "האם הוא התחיל וסיים בישי''ג ק''ג?",
     yes: {
@@ -250,7 +251,7 @@ const tree = {
                     no: {
                         q: "יליד תשס''ג?",
                         yes: "צביקי קנלסקי",
-                        no: "מנחם רוזנברג ב''ש"
+                        no: 'מנחם רוזנברג ב"ש'
                     }
                 },
                 no: {
@@ -337,7 +338,7 @@ const tree = {
                     },
                     no: {
                         q: "בכור",
-                        yes: "ישראליק טרקסלער",
+                        yes: "ישראליק טרקסלר",
                         no: "גדליהו שארר"
                     }
                 },
@@ -425,7 +426,7 @@ const tree = {
                     no: {
                         q: "מגדליסט?",
                         yes: "שמוליק ליפשיץ",
-                        no: "מענדי רוזנברג ב''ב"
+                        no: 'מענדי רוזנברג ב"ב'
                     }
                 }
             }
@@ -452,7 +453,8 @@ function getLastName(fullName) {
   if (parts.length === 0) return "";
   
   const lastPart = parts[parts.length - 1];
-  if ((lastPart.includes("''") || lastPart.includes('"')) && parts.length > 2) {
+  // תומך במיון נכון גם עם גרשיים
+  if ((lastPart.includes("''") || lastPart.includes('"') || lastPart.includes("'")) && parts.length > 2) {
       return parts[parts.length - 2];
   }
   return lastPart;
@@ -512,8 +514,9 @@ function showQuestion() {
     quizScreen.style.display = "none";
     resultScreen.style.display = "block";
     
-    // מעדכן את הסיומת ל-JPG באותיות גדולות כפי שמופיע ב-GitHub שלך
-    const imagePath = `pics/${currentNode}.JPG`;
+    // פונקציה שמחליפה את הגרשיים (") בגרש (') רק עבור שם הקובץ
+    const fileNameForImage = currentNode.replace(/"/g, "'");
+    const imagePath = `pics/${fileNameForImage}.JPG`;
     
     resultContent.innerHTML = `
       <img src="${imagePath}" class="profile-image-large" 
