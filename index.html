@@ -77,15 +77,15 @@
     }
 
     .names-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 6px;
-      justify-content: center; /* ממרכז את הפריטים בתוך הגריד */
-      justify-items: center;
     }
 
     .name-item {
-      width: 100%; /* מבטיח שהפריטים ימלאו את הטורים שלהם */
+      flex: 0 1 calc(33.333% - 6px);
+      min-width: 80px;
       font-size: 11px;
       color: #444;
       background: white;
@@ -99,23 +99,6 @@
       align-items: center;
       justify-content: center;
       min-height: 34px;
-    }
-
-    /* עיצוב לשורה האחרונה למרכוז */
-    .names-grid > div:last-child:nth-child(3n-2) {
-      grid-column-start: 2; /* אם יש פריט אחד בשורה האחרונה, שים אותו בטור האמצעי */
-    }
-    
-    /* במקרה שיש 2 פריטים בשורה האחרונה, זה דורש לוגיקה מעט שונה ב-Grid, לכן נשתמש ב-Flexbox כחלופה רשימתית גמישה יותר */
-    .names-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-    }
-    .name-item {
-      flex: 0 1 calc(33.333% - 6px); /* 3 בטור */
-      min-width: 80px;
     }
 
     #questionNumber { font-weight: 800; font-size: 18px; margin-bottom: 15px; text-align: center; color: #1a5c4e; }
@@ -529,7 +512,8 @@ function showQuestion() {
     quizScreen.style.display = "none";
     resultScreen.style.display = "block";
     
-    const imagePath = `pics/${currentNode}.jpg`;
+    // מעדכן את הסיומת ל-JPG באותיות גדולות כפי שמופיע ב-GitHub שלך
+    const imagePath = `pics/${currentNode}.JPG`;
     
     resultContent.innerHTML = `
       <img src="${imagePath}" class="profile-image-large" 
